@@ -1,0 +1,57 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: schools24-gateway
+  namespace: schools24
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "api.schools24.com"
+        - "*.schools24.com"
+      tls:
+        httpsRedirect: true
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      hosts:
+        - "api.schools24.com"
+        - "*.schools24.com"
+      tls:
+        mode: SIMPLE
+        credentialName: schools24-tls-cert
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: schools24-api
+  namespace: schools24
+spec:
+  hosts:
+    - "api.schools24.com"
+  gateways:
+    - schools24-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: krakend
+            port:
+              number: 80
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: schools24
+spec:
+  mtls:
+    mode: STRICT

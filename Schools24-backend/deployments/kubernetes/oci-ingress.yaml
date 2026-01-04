@@ -1,0 +1,55 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: schools24-ingress
+  namespace: schools24
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # OCI Load Balancer annotations
+    oci.oraclecloud.com/load-balancer-type: "lb"
+    service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "100"
+    # SSL/TLS
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # Rate limiting
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+spec:
+  tls:
+    - hosts:
+        - api.schools24.com
+      secretName: schools24-tls
+  rules:
+    - host: api.schools24.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: krakend
+                port:
+                  number: 80
+---
+# OCI Load Balancer Service (alternative to Ingress)
+apiVersion: v1
+kind: Service
+metadata:
+  name: krakend-lb
+  namespace: schools24
+  annotations:
+    oci.oraclecloud.com/load-balancer-type: "lb"
+    service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "50"
+spec:
+  type: LoadBalancer
+  selector:
+    app: krakend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+    - name: https
+      port: 443
+      targetPort: 8080

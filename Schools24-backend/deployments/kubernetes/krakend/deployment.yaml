@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: krakend
+  namespace: schools24
+  labels:
+    app: krakend
+    tier: gateway
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: krakend
+  template:
+    metadata:
+      labels:
+        app: krakend
+        tier: gateway
+    spec:
+      containers:
+        - name: krakend
+          image: devopsfaith/krakend:2.8
+          ports:
+            - containerPort: 8080
+          args:
+            - run
+            - -c
+            - /etc/krakend/krakend.json
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          volumeMounts:
+            - name: krakend-config
+              mountPath: /etc/krakend
+          livenessProbe:
+            httpGet:
+              path: /__health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /__health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: krakend-config
+          configMap:
+            name: krakend-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: krakend
+  namespace: schools24
+spec:
+  selector:
+    app: krakend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: krakend-config
+  namespace: schools24
+data:
+  krakend.json: |
+    {
+      "$schema": "https://www.krakend.io/schema/v2.8/krakend.json",
+      "version": 3,
+      "name": "Schools24 API Gateway",
+      "port": 8080,
+      "timeout": "30s",
+      "endpoints": [
+        {
+          "endpoint": "/health",
+          "method": "GET",
+          "backend": [{"url_pattern": "/health", "host": ["http://backend:8081"]}]
+        },
+        {
+          "endpoint": "/api/v1/auth/{path}",
+          "method": "POST",
+          "backend": [{"url_pattern": "/api/v1/auth/{path}", "host": ["http://backend:8081"]}]
+        },
+        {
+          "endpoint": "/api/v1/academic/{path}",
+          "backend": [{"url_pattern": "/api/v1/academic/{path}", "host": ["http://backend:8081"]}]
+        },
+        {
+          "endpoint": "/api/v1/finance/{path}",
+          "backend": [{"url_pattern": "/api/v1/finance/{path}", "host": ["http://backend:8081"]}]
+        }
+      ]
+    }

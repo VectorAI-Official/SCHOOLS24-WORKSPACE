@@ -1,0 +1,123 @@
+{
+  "$schema": "https://www.krakend.io/schema/v2.8/krakend.json",
+  "version": 3,
+  "name": "Schools24 API Gateway",
+  "port": 8080,
+  "timeout": "30s",
+  "cache_ttl": "300s",
+  "extra_config": {
+    "router": {
+      "return_error_msg": true
+    }
+  },
+  "endpoints": [
+    {
+      "endpoint": "/health",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/health",
+          "host": ["http://backend:8081"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/auth/login",
+      "method": "POST",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/auth/login",
+          "host": ["http://backend:8081"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/auth/logout",
+      "method": "POST",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/auth/logout",
+          "host": ["http://backend:8081"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/auth/refresh",
+      "method": "POST",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/auth/refresh",
+          "host": ["http://backend:8081"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/academic/quizzes",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/academic/quizzes",
+          "host": ["http://backend:8081"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/academic/homework",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/academic/homework",
+          "host": ["http://backend:8081"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/finance/fees/{studentId}",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/finance/fees/{studentId}",
+          "host": ["http://backend:8081"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/finance/payments",
+      "method": "POST",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/finance/payments",
+          "host": ["http://backend:8081"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/cache-test",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/cache-test",
+          "host": ["http://backend:8081"],
+          "encoding": "json"
+        }
+      ]
+    }
+  ]
+}
