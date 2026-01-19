@@ -1,0 +1,645 @@
+// Mock Data for School24 School Management System
+
+export type UserRole = 'admin' | 'teacher' | 'student';
+
+export interface User {
+    id: string;
+    name: string;
+    email: string;
+    role: UserRole;
+    avatar?: string;
+    phone?: string;
+    department?: string;
+    class?: string;
+    section?: string;
+    rollNumber?: string;
+    employeeId?: string;
+    joinDate?: string;
+    status: 'active' | 'inactive';
+}
+
+export interface Student {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    class: string;
+    section: string;
+    rollNumber: string;
+    parentName: string;
+    parentPhone: string;
+    address: string;
+    dateOfBirth: string;
+    admissionDate: string;
+    avatar?: string;
+    attendance: number;
+    grade: string;
+    fees: {
+        total: number;
+        paid: number;
+        pending: number;
+        status: 'paid' | 'partial' | 'pending';
+    };
+    performance: {
+        rank: number;
+        totalStudents: number;
+        averageScore: number;
+        subjects: { name: string; score: number; grade: string }[];
+    };
+}
+
+export interface Teacher {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    employeeId: string;
+    department: string;
+    subjects: string[];
+    classes: string[];
+    qualification: string;
+    experience: string;
+    joinDate: string;
+    avatar?: string;
+    salary: number;
+    rating: number;
+    status: 'active' | 'on-leave' | 'inactive';
+}
+
+export interface Event {
+    id: string;
+    title: string;
+    description: string;
+    date: string;
+    time: string;
+    type: 'holiday' | 'exam' | 'event' | 'meeting' | 'sports' | 'cultural';
+    location?: string;
+    attendees?: string[];
+}
+
+export interface Quiz {
+    id: string;
+    title: string;
+    subject: string;
+    class: string;
+    duration: number;
+    totalMarks: number;
+    questions: number;
+    scheduledDate: string;
+    status: 'upcoming' | 'active' | 'completed';
+    createdBy: string;
+}
+
+export interface Homework {
+    id: string;
+    title: string;
+    subject: string;
+    class: string;
+    description: string;
+    dueDate: string;
+    attachments?: string[];
+    assignedBy: string;
+    status: 'pending' | 'submitted' | 'graded';
+}
+
+export interface BusRoute {
+    id: string;
+    routeNumber: string;
+    driverName: string;
+    driverPhone: string;
+    vehicleNumber: string;
+    capacity: number;
+    currentStudents: number;
+    stops: { name: string; time: string }[];
+    status: 'active' | 'inactive';
+}
+
+export interface InventoryItem {
+    id: string;
+    name: string;
+    category: string;
+    quantity: number;
+    unit: string;
+    minStock: number;
+    location: string;
+    lastUpdated: string;
+    status: 'in-stock' | 'low-stock' | 'out-of-stock';
+}
+
+export interface TimetableSlot {
+    id: string;
+    day: string;
+    startTime: string;
+    endTime: string;
+    subject: string;
+    teacher: string;
+    class: string;
+    room: string;
+}
+
+export interface AttendanceRecord {
+    id: string;
+    studentId: string;
+    studentName: string;
+    date: string;
+    status: 'present' | 'absent' | 'late' | 'excused';
+    remarks?: string;
+}
+
+export interface FeeRecord {
+    id: string;
+    studentId: string;
+    studentName: string;
+    class: string;
+    feeType: string;
+    amount: number;
+    dueDate: string;
+    paidDate?: string;
+    status: 'paid' | 'pending' | 'overdue';
+    paymentMethod?: string;
+    transactionId?: string;
+}
+
+export interface Material {
+    id: string;
+    title: string;
+    subject: string;
+    class: string;
+    type: 'pdf' | 'video' | 'link' | 'document';
+    url: string;
+    uploadedBy: string;
+    uploadedDate: string;
+    downloads: number;
+    size?: string;
+}
+
+export interface Message {
+    id: string;
+    from: string;
+    to: string;
+    subject: string;
+    content: string;
+    date: string;
+    read: boolean;
+    attachments?: string[];
+}
+
+export interface Feedback {
+    id: string;
+    studentId: string;
+    studentName: string;
+    teacherId: string;
+    teacherName: string;
+    subject: string;
+    rating: number;
+    comment: string;
+    date: string;
+}
+
+// Mock Users
+export const mockUsers: User[] = [
+    { id: '1', name: 'Admin User', email: 'admin@School24.com', role: 'admin', phone: '+91 9876543210', status: 'active' },
+    { id: '2', name: 'Rajesh Kumar', email: 'rajesh@School24.com', role: 'teacher', department: 'Mathematics', status: 'active' },
+    { id: '3', name: 'Priya Sharma', email: 'priya@School24.com', role: 'teacher', department: 'Science', status: 'active' },
+    { id: '4', name: 'Amit Singh', email: 'amit@School24.com', role: 'student', class: '10-A', rollNumber: '1001', status: 'active' },
+    { id: '5', name: 'Sneha Patel', email: 'sneha@School24.com', role: 'student', class: '10-A', rollNumber: '1002', status: 'active' },
+];
+
+// Mock Students
+export const mockStudents: Student[] = [
+    {
+        id: '1',
+        name: 'Amit Singh',
+        email: 'amit.singh@student.School24.com',
+        phone: '+91 9876543211',
+        class: '10',
+        section: 'A',
+        rollNumber: '1001',
+        parentName: 'Vikram Singh',
+        parentPhone: '+91 9876543212',
+        address: '123, Green Park, New Delhi',
+        dateOfBirth: '2008-05-15',
+        admissionDate: '2020-04-01',
+        attendance: 92,
+        grade: 'A',
+        fees: { total: 120000, paid: 90000, pending: 30000, status: 'partial' },
+        performance: {
+            rank: 3,
+            totalStudents: 45,
+            averageScore: 87,
+            subjects: [
+                { name: 'Mathematics', score: 92, grade: 'A+' },
+                { name: 'Science', score: 88, grade: 'A' },
+                { name: 'English', score: 85, grade: 'A' },
+                { name: 'Hindi', score: 82, grade: 'B+' },
+                { name: 'Social Studies', score: 88, grade: 'A' },
+            ],
+        },
+    },
+    {
+        id: '2',
+        name: 'Sneha Patel',
+        email: 'sneha.patel@student.School24.com',
+        phone: '+91 9876543213',
+        class: '10',
+        section: 'A',
+        rollNumber: '1002',
+        parentName: 'Ramesh Patel',
+        parentPhone: '+91 9876543214',
+        address: '456, Lajpat Nagar, New Delhi',
+        dateOfBirth: '2008-08-22',
+        admissionDate: '2020-04-01',
+        attendance: 96,
+        grade: 'A+',
+        fees: { total: 120000, paid: 120000, pending: 0, status: 'paid' },
+        performance: {
+            rank: 1,
+            totalStudents: 45,
+            averageScore: 94,
+            subjects: [
+                { name: 'Mathematics', score: 98, grade: 'A+' },
+                { name: 'Science', score: 95, grade: 'A+' },
+                { name: 'English', score: 92, grade: 'A+' },
+                { name: 'Hindi', score: 90, grade: 'A+' },
+                { name: 'Social Studies', score: 95, grade: 'A+' },
+            ],
+        },
+    },
+    {
+        id: '3',
+        name: 'Rahul Verma',
+        email: 'rahul.verma@student.School24.com',
+        phone: '+91 9876543215',
+        class: '10',
+        section: 'B',
+        rollNumber: '1003',
+        parentName: 'Suresh Verma',
+        parentPhone: '+91 9876543216',
+        address: '789, Vasant Kunj, New Delhi',
+        dateOfBirth: '2008-03-10',
+        admissionDate: '2020-04-01',
+        attendance: 88,
+        grade: 'B+',
+        fees: { total: 120000, paid: 60000, pending: 60000, status: 'partial' },
+        performance: {
+            rank: 8,
+            totalStudents: 45,
+            averageScore: 78,
+            subjects: [
+                { name: 'Mathematics', score: 75, grade: 'B' },
+                { name: 'Science', score: 80, grade: 'B+' },
+                { name: 'English', score: 78, grade: 'B+' },
+                { name: 'Hindi', score: 82, grade: 'B+' },
+                { name: 'Social Studies', score: 75, grade: 'B' },
+            ],
+        },
+    },
+    {
+        id: '4',
+        name: 'Meera Kapoor',
+        email: 'meera.kapoor@student.School24.com',
+        phone: '+91 9876543217',
+        class: '9',
+        section: 'A',
+        rollNumber: '0901',
+        parentName: 'Anil Kapoor',
+        parentPhone: '+91 9876543218',
+        address: '321, Dwarka, New Delhi',
+        dateOfBirth: '2009-11-05',
+        admissionDate: '2021-04-01',
+        attendance: 94,
+        grade: 'A',
+        fees: { total: 110000, paid: 110000, pending: 0, status: 'paid' },
+        performance: {
+            rank: 2,
+            totalStudents: 42,
+            averageScore: 91,
+            subjects: [
+                { name: 'Mathematics', score: 94, grade: 'A+' },
+                { name: 'Science', score: 92, grade: 'A+' },
+                { name: 'English', score: 88, grade: 'A' },
+                { name: 'Hindi', score: 90, grade: 'A+' },
+                { name: 'Social Studies', score: 91, grade: 'A+' },
+            ],
+        },
+    },
+    {
+        id: '5',
+        name: 'Arjun Mehta',
+        email: 'arjun.mehta@student.School24.com',
+        phone: '+91 9876543219',
+        class: '9',
+        section: 'B',
+        rollNumber: '0902',
+        parentName: 'Prakash Mehta',
+        parentPhone: '+91 9876543220',
+        address: '654, Rohini, New Delhi',
+        dateOfBirth: '2009-07-18',
+        admissionDate: '2021-04-01',
+        attendance: 90,
+        grade: 'A',
+        fees: { total: 110000, paid: 80000, pending: 30000, status: 'partial' },
+        performance: {
+            rank: 5,
+            totalStudents: 42,
+            averageScore: 85,
+            subjects: [
+                { name: 'Mathematics', score: 88, grade: 'A' },
+                { name: 'Science', score: 86, grade: 'A' },
+                { name: 'English', score: 82, grade: 'B+' },
+                { name: 'Hindi', score: 85, grade: 'A' },
+                { name: 'Social Studies', score: 84, grade: 'A' },
+            ],
+        },
+    },
+];
+
+// Mock Teachers
+export const mockTeachers: Teacher[] = [
+    {
+        id: '1',
+        name: 'Rajesh Kumar',
+        email: 'rajesh.kumar@School24.com',
+        phone: '+91 9876543221',
+        employeeId: 'TCH001',
+        department: 'Mathematics',
+        subjects: ['Mathematics', 'Physics'],
+        classes: ['9-A', '9-B', '10-A', '10-B'],
+        qualification: 'M.Sc. Mathematics, B.Ed',
+        experience: '12 years',
+        joinDate: '2012-06-15',
+        salary: 65000,
+        rating: 4.8,
+        status: 'active',
+    },
+    {
+        id: '2',
+        name: 'Priya Sharma',
+        email: 'priya.sharma@School24.com',
+        phone: '+91 9876543222',
+        employeeId: 'TCH002',
+        department: 'Science',
+        subjects: ['Chemistry', 'Biology'],
+        classes: ['9-A', '10-A', '10-B'],
+        qualification: 'M.Sc. Chemistry, B.Ed',
+        experience: '8 years',
+        joinDate: '2016-04-01',
+        salary: 55000,
+        rating: 4.6,
+        status: 'active',
+    },
+    {
+        id: '3',
+        name: 'Ankit Gupta',
+        email: 'ankit.gupta@School24.com',
+        phone: '+91 9876543223',
+        employeeId: 'TCH003',
+        department: 'English',
+        subjects: ['English', 'Literature'],
+        classes: ['8-A', '8-B', '9-A', '9-B'],
+        qualification: 'M.A. English, B.Ed',
+        experience: '6 years',
+        joinDate: '2018-07-15',
+        salary: 50000,
+        rating: 4.5,
+        status: 'active',
+    },
+    {
+        id: '4',
+        name: 'Sunita Devi',
+        email: 'sunita.devi@School24.com',
+        phone: '+91 9876543224',
+        employeeId: 'TCH004',
+        department: 'Hindi',
+        subjects: ['Hindi', 'Sanskrit'],
+        classes: ['6-A', '6-B', '7-A', '7-B'],
+        qualification: 'M.A. Hindi, B.Ed',
+        experience: '15 years',
+        joinDate: '2009-08-01',
+        salary: 70000,
+        rating: 4.9,
+        status: 'active',
+    },
+    {
+        id: '5',
+        name: 'Vikram Joshi',
+        email: 'vikram.joshi@School24.com',
+        phone: '+91 9876543225',
+        employeeId: 'TCH005',
+        department: 'Social Studies',
+        subjects: ['History', 'Geography', 'Civics'],
+        classes: ['9-A', '9-B', '10-A'],
+        qualification: 'M.A. History, B.Ed',
+        experience: '10 years',
+        joinDate: '2014-05-01',
+        salary: 60000,
+        rating: 4.7,
+        status: 'on-leave',
+    },
+];
+
+// Mock Events
+export const mockEvents: Event[] = [
+    { id: '1', title: 'Republic Day Celebration', description: 'Annual Republic Day celebration with flag hoisting and cultural programs', date: '2026-01-26', time: '08:00 AM', type: 'event', location: 'Main Ground' },
+    { id: '2', title: 'Mid-Term Examinations', description: 'Mid-term examinations for all classes', date: '2026-02-15', time: '09:00 AM', type: 'exam', location: 'Examination Hall' },
+    { id: '3', title: 'Holi Vacation', description: 'Holiday for Holi festival', date: '2026-03-14', time: 'All Day', type: 'holiday' },
+    { id: '4', title: 'Parent-Teacher Meeting', description: 'Quarterly parent-teacher meeting to discuss student progress', date: '2026-02-20', time: '10:00 AM', type: 'meeting', location: 'Conference Hall' },
+    { id: '5', title: 'Annual Sports Day', description: 'Annual sports competition and athletic events', date: '2026-02-28', time: '08:00 AM', type: 'sports', location: 'Sports Complex' },
+    { id: '6', title: 'Science Exhibition', description: 'Student science project exhibition', date: '2026-03-05', time: '09:00 AM', type: 'event', location: 'Science Block' },
+];
+
+// Mock Quizzes
+export const mockQuizzes: Quiz[] = [
+    { id: '1', title: 'Algebra Basics Quiz', subject: 'Mathematics', class: '10-A', duration: 30, totalMarks: 50, questions: 25, scheduledDate: '2026-01-15', status: 'upcoming', createdBy: 'Rajesh Kumar' },
+    { id: '2', title: 'Chemical Reactions', subject: 'Chemistry', class: '10-A', duration: 45, totalMarks: 60, questions: 30, scheduledDate: '2026-01-18', status: 'upcoming', createdBy: 'Priya Sharma' },
+    { id: '3', title: 'English Grammar Test', subject: 'English', class: '9-A', duration: 40, totalMarks: 50, questions: 25, scheduledDate: '2026-01-12', status: 'completed', createdBy: 'Ankit Gupta' },
+    { id: '4', title: 'History of India', subject: 'History', class: '10-B', duration: 35, totalMarks: 40, questions: 20, scheduledDate: '2026-01-20', status: 'upcoming', createdBy: 'Vikram Joshi' },
+];
+
+// Mock Bus Routes
+export const mockBusRoutes: BusRoute[] = [
+    {
+        id: '1',
+        routeNumber: 'R-001',
+        driverName: 'Ramesh Singh',
+        driverPhone: '+91 9876543230',
+        vehicleNumber: 'DL-01-AB-1234',
+        capacity: 40,
+        currentStudents: 35,
+        stops: [
+            { name: 'Green Park', time: '07:00 AM' },
+            { name: 'Hauz Khas', time: '07:15 AM' },
+            { name: 'Malviya Nagar', time: '07:30 AM' },
+            { name: 'School', time: '08:00 AM' },
+        ],
+        status: 'active',
+    },
+    {
+        id: '2',
+        routeNumber: 'R-002',
+        driverName: 'Sunil Kumar',
+        driverPhone: '+91 9876543231',
+        vehicleNumber: 'DL-01-CD-5678',
+        capacity: 45,
+        currentStudents: 42,
+        stops: [
+            { name: 'Dwarka Sector 12', time: '07:00 AM' },
+            { name: 'Dwarka Sector 7', time: '07:15 AM' },
+            { name: 'Janakpuri', time: '07:35 AM' },
+            { name: 'School', time: '08:00 AM' },
+        ],
+        status: 'active',
+    },
+    {
+        id: '3',
+        routeNumber: 'R-003',
+        driverName: 'Mahesh Yadav',
+        driverPhone: '+91 9876543232',
+        vehicleNumber: 'DL-01-EF-9012',
+        capacity: 35,
+        currentStudents: 28,
+        stops: [
+            { name: 'Rohini Sector 3', time: '07:00 AM' },
+            { name: 'Pitampura', time: '07:20 AM' },
+            { name: 'Shalimar Bagh', time: '07:40 AM' },
+            { name: 'School', time: '08:10 AM' },
+        ],
+        status: 'active',
+    },
+];
+
+// Mock Inventory Items
+export const mockInventory: InventoryItem[] = [
+    { id: '1', name: 'Whiteboard Markers', category: 'Stationery', quantity: 250, unit: 'pieces', minStock: 50, location: 'Store Room A', lastUpdated: '2026-01-08', status: 'in-stock' },
+    { id: '2', name: 'A4 Paper Reams', category: 'Stationery', quantity: 45, unit: 'reams', minStock: 100, location: 'Store Room A', lastUpdated: '2026-01-07', status: 'low-stock' },
+    { id: '3', name: 'Microscopes', category: 'Lab Equipment', quantity: 25, unit: 'pieces', minStock: 20, location: 'Science Lab', lastUpdated: '2026-01-05', status: 'in-stock' },
+    { id: '4', name: 'Footballs', category: 'Sports', quantity: 15, unit: 'pieces', minStock: 10, location: 'Sports Room', lastUpdated: '2026-01-06', status: 'in-stock' },
+    { id: '5', name: 'Chalk Boxes', category: 'Stationery', quantity: 0, unit: 'boxes', minStock: 30, location: 'Store Room A', lastUpdated: '2026-01-08', status: 'out-of-stock' },
+    { id: '6', name: 'Projectors', category: 'Electronics', quantity: 8, unit: 'pieces', minStock: 5, location: 'AV Room', lastUpdated: '2026-01-04', status: 'in-stock' },
+];
+
+// Mock Timetable
+export const mockTimetable: TimetableSlot[] = [
+    { id: '1', day: 'Monday', startTime: '08:00', endTime: '08:45', subject: 'Mathematics', teacher: 'Rajesh Kumar', class: '10-A', room: '101' },
+    { id: '2', day: 'Monday', startTime: '08:45', endTime: '09:30', subject: 'English', teacher: 'Ankit Gupta', class: '10-A', room: '101' },
+    { id: '3', day: 'Monday', startTime: '09:45', endTime: '10:30', subject: 'Science', teacher: 'Priya Sharma', class: '10-A', room: '101' },
+    { id: '4', day: 'Monday', startTime: '10:30', endTime: '11:15', subject: 'Hindi', teacher: 'Sunita Devi', class: '10-A', room: '101' },
+    { id: '5', day: 'Monday', startTime: '11:30', endTime: '12:15', subject: 'History', teacher: 'Vikram Joshi', class: '10-A', room: '101' },
+    { id: '6', day: 'Tuesday', startTime: '08:00', endTime: '08:45', subject: 'Science', teacher: 'Priya Sharma', class: '10-A', room: '101' },
+    { id: '7', day: 'Tuesday', startTime: '08:45', endTime: '09:30', subject: 'Mathematics', teacher: 'Rajesh Kumar', class: '10-A', room: '101' },
+    { id: '8', day: 'Tuesday', startTime: '09:45', endTime: '10:30', subject: 'English', teacher: 'Ankit Gupta', class: '10-A', room: '101' },
+    { id: '9', day: 'Wednesday', startTime: '08:00', endTime: '08:45', subject: 'Hindi', teacher: 'Sunita Devi', class: '10-A', room: '101' },
+    { id: '10', day: 'Wednesday', startTime: '08:45', endTime: '09:30', subject: 'History', teacher: 'Vikram Joshi', class: '10-A', room: '101' },
+];
+
+// Mock Fee Records
+export const mockFeeRecords: FeeRecord[] = [
+    { id: '1', studentId: '1', studentName: 'Amit Singh', class: '10-A', feeType: 'Tuition Fee', amount: 30000, dueDate: '2026-01-15', status: 'pending' },
+    { id: '2', studentId: '2', studentName: 'Sneha Patel', class: '10-A', feeType: 'Tuition Fee', amount: 30000, dueDate: '2026-01-15', paidDate: '2026-01-05', status: 'paid', paymentMethod: 'Online', transactionId: 'TXN123456' },
+    { id: '3', studentId: '3', studentName: 'Rahul Verma', class: '10-B', feeType: 'Lab Fee', amount: 5000, dueDate: '2026-01-10', status: 'overdue' },
+    { id: '4', studentId: '4', studentName: 'Meera Kapoor', class: '9-A', feeType: 'Tuition Fee', amount: 27500, dueDate: '2026-01-15', paidDate: '2026-01-08', status: 'paid', paymentMethod: 'Cash' },
+    { id: '5', studentId: '5', studentName: 'Arjun Mehta', class: '9-B', feeType: 'Transport Fee', amount: 8000, dueDate: '2026-01-20', status: 'pending' },
+];
+
+// Mock Materials
+export const mockMaterials: Material[] = [
+    { id: '1', title: 'Algebra Fundamentals', subject: 'Mathematics', class: '10', type: 'pdf', url: '/materials/algebra.pdf', uploadedBy: 'Rajesh Kumar', uploadedDate: '2026-01-05', downloads: 45, size: '2.5 MB' },
+    { id: '2', title: 'Chemical Bonding Video', subject: 'Chemistry', class: '10', type: 'video', url: '/materials/bonding.mp4', uploadedBy: 'Priya Sharma', uploadedDate: '2026-01-03', downloads: 38, size: '45 MB' },
+    { id: '3', title: 'English Grammar Guide', subject: 'English', class: '9', type: 'pdf', url: '/materials/grammar.pdf', uploadedBy: 'Ankit Gupta', uploadedDate: '2026-01-07', downloads: 62, size: '1.8 MB' },
+    { id: '4', title: 'History Timeline', subject: 'History', class: '10', type: 'document', url: '/materials/timeline.docx', uploadedBy: 'Vikram Joshi', uploadedDate: '2026-01-02', downloads: 28, size: '850 KB' },
+    { id: '5', title: 'Physics Motion Laws', subject: 'Physics', class: '10', type: 'pdf', url: '/materials/motion.pdf', uploadedBy: 'Rajesh Kumar', uploadedDate: '2026-01-04', downloads: 52, size: '3.2 MB' },
+    { id: '6', title: 'Biology Cell Structure', subject: 'Biology', class: '9', type: 'video', url: '/materials/cell.mp4', uploadedBy: 'Priya Sharma', uploadedDate: '2026-01-06', downloads: 41, size: '38 MB' },
+];
+
+// Mock Attendance Records
+export const mockAttendance: AttendanceRecord[] = [
+    { id: '1', studentId: '1', studentName: 'Amit Singh', date: '2026-01-08', status: 'present' },
+    { id: '2', studentId: '2', studentName: 'Sneha Patel', date: '2026-01-08', status: 'present' },
+    { id: '3', studentId: '3', studentName: 'Rahul Verma', date: '2026-01-08', status: 'absent', remarks: 'Sick leave' },
+    { id: '4', studentId: '4', studentName: 'Meera Kapoor', date: '2026-01-08', status: 'present' },
+    { id: '5', studentId: '5', studentName: 'Arjun Mehta', date: '2026-01-08', status: 'late', remarks: 'Arrived at 8:30 AM' },
+];
+
+// Mock Messages
+export const mockMessages: Message[] = [
+    { id: '1', from: 'Rajesh Kumar', to: 'All Students 10-A', subject: 'Upcoming Math Test', content: 'Dear students, please prepare for the mathematics test scheduled for next Monday.', date: '2026-01-08', read: false },
+    { id: '2', from: 'Principal', to: 'All Teachers', subject: 'Staff Meeting', content: 'There will be a staff meeting on Friday at 3 PM in the conference room.', date: '2026-01-07', read: true },
+    { id: '3', from: 'Admin', to: 'All', subject: 'Holiday Notice', content: 'The school will remain closed on January 26th for Republic Day.', date: '2026-01-06', read: true },
+];
+
+// Dashboard Statistics
+export const dashboardStats = {
+    admin: {
+        totalStudents: 850,
+        totalTeachers: 45,
+        totalStaff: 25,
+        totalRevenue: 12500000,
+        pendingFees: 2350000,
+        attendance: 94.5,
+        activeClasses: 24,
+        upcomingEvents: 5,
+    },
+    teacher: {
+        totalClasses: 6,
+        totalStudents: 180,
+        pendingAssignments: 12,
+        upcomingQuizzes: 3,
+        averageAttendance: 92,
+        rating: 4.7,
+    },
+    student: {
+        attendance: 92,
+        rank: 3,
+        totalStudents: 45,
+        upcomingQuizzes: 2,
+        pendingFees: 30000,
+        assignments: 3,
+    },
+};
+
+// Chart Data
+export const revenueChartData = [
+    { month: 'Apr', revenue: 1200000, expenses: 800000 },
+    { month: 'May', revenue: 1100000, expenses: 750000 },
+    { month: 'Jun', revenue: 1050000, expenses: 700000 },
+    { month: 'Jul', revenue: 1300000, expenses: 850000 },
+    { month: 'Aug', revenue: 1250000, expenses: 820000 },
+    { month: 'Sep', revenue: 1400000, expenses: 900000 },
+    { month: 'Oct', revenue: 1350000, expenses: 880000 },
+    { month: 'Nov', revenue: 1450000, expenses: 920000 },
+    { month: 'Dec', revenue: 1500000, expenses: 950000 },
+    { month: 'Jan', revenue: 1550000, expenses: 980000 },
+];
+
+export const attendanceChartData = [
+    { day: 'Mon', present: 92, absent: 8 },
+    { day: 'Tue', present: 95, absent: 5 },
+    { day: 'Wed', present: 88, absent: 12 },
+    { day: 'Thu', present: 94, absent: 6 },
+    { day: 'Fri', present: 91, absent: 9 },
+];
+
+export const subjectPerformanceData = [
+    { subject: 'Mathematics', score: 85 },
+    { subject: 'Science', score: 82 },
+    { subject: 'English', score: 78 },
+    { subject: 'Hindi', score: 80 },
+    { subject: 'Social Studies', score: 75 },
+];
+
+export const leaderboardData = {
+    students: [
+        { rank: 1, name: 'Sneha Patel', class: '10-A', score: 94, trend: 'up' },
+        { rank: 2, name: 'Meera Kapoor', class: '9-A', score: 91, trend: 'up' },
+        { rank: 3, name: 'Amit Singh', class: '10-A', score: 87, trend: 'same' },
+        { rank: 4, name: 'Riya Gupta', class: '10-B', score: 86, trend: 'down' },
+        { rank: 5, name: 'Arjun Mehta', class: '9-B', score: 85, trend: 'up' },
+    ],
+    teachers: [
+        { rank: 1, name: 'Sunita Devi', department: 'Hindi', rating: 4.9, students: 120 },
+        { rank: 2, name: 'Rajesh Kumar', department: 'Mathematics', rating: 4.8, students: 180 },
+        { rank: 3, name: 'Vikram Joshi', department: 'Social Studies', rating: 4.7, students: 135 },
+        { rank: 4, name: 'Priya Sharma', department: 'Science', rating: 4.6, students: 150 },
+        { rank: 5, name: 'Ankit Gupta', department: 'English', rating: 4.5, students: 160 },
+    ],
+};
