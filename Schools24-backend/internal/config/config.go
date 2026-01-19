@@ -11,7 +11,7 @@ import (
 // Config holds all configuration for the application
 type Config struct {
 	App       AppConfig
-	Supabase  SupabaseConfig
+	Database  DatabaseConfig
 	MongoDB   MongoDBConfig
 	Redis     RedisConfig
 	JWT       JWTConfig
@@ -33,11 +33,8 @@ type AppConfig struct {
 	GinMode string
 }
 
-type SupabaseConfig struct {
-	URL            string
-	AnonKey        string
-	ServiceRoleKey string
-	DatabaseURL    string
+type DatabaseConfig struct {
+	URL string // Neon PostgreSQL connection string
 }
 
 type MongoDBConfig struct {
@@ -125,11 +122,8 @@ func Load() *Config {
 			Port:    getEnv("SERVER_PORT", "8080"),
 			GinMode: getEnv("GIN_MODE", "debug"),
 		},
-		Supabase: SupabaseConfig{
-			URL:            getEnv("SUPABASE_URL", ""),
-			AnonKey:        getEnv("SUPABASE_ANON_KEY", ""),
-			ServiceRoleKey: getEnv("SUPABASE_SERVICE_ROLE_KEY", ""),
-			DatabaseURL:    getEnv("DATABASE_URL", ""),
+		Database: DatabaseConfig{
+			URL: getEnv("DATABASE_URL", ""),
 		},
 		MongoDB: MongoDBConfig{
 			URI:      getEnv("MONGODB_URI", "mongodb://localhost:27017"),

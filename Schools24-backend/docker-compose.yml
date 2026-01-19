@@ -1,80 +1,29 @@
 version: "3.8"
 
-services:
-  # KrakenD API Gateway
-  krakend:
-    image: devopsfaith/krakend:2.8
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./krakend:/etc/krakend
-    command: ["run", "-c", "/etc/krakend/krakend.json"]
-    depends_on:
-      - backend
-    networks:
-      - schools24-net
+# Schools24 Backend - Oracle ARM VM Optimized
+# Single container deployment for $0/month hosting
 
-  # Backend Service (Single Go Binary)
+services:
   backend:
     build:
       context: .
-      dockerfile: deployments/docker/backend.Dockerfile
+      dockerfile: Dockerfile
     ports:
-      - "8081:8081"
+      - "8080:8080"
     env_file:
       - .env
     environment:
-      - REDIS_ADDR=redis:6379
-      - POSTGRES_HOST=postgres
-      - MONGODB_URI=mongodb://mongo:27017
-    depends_on:
-      - redis
-      - postgres
-      - mongo
-    networks:
-      - schools24-net
+      - GIN_MODE=release
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
-  # Redis Cache
-  redis:
-    image: redis:7.2-alpine
-    ports:
-      - "6379:6379"
-    command: redis-server --appendonly yes
-    volumes:
-      - redis_data:/data
-    networks:
-      - schools24-net
-
-  # PostgreSQL: Using Supabase (managed), no local container needed
-  # If you need local PostgreSQL for testing, uncomment below:
-  # postgres:
-  #   image: postgres:16-alpine
-  #   ports:
-  #     - "5432:5432"
-  #   environment:
-  #     POSTGRES_USER: schools24_app
-  #     POSTGRES_PASSWORD: schools24_dev_password
-  #     POSTGRES_DB: schools24_db
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   networks:
-  #     - schools24-net
-
-  # MongoDB Database (or use MongoDB Atlas connection string in .env)
-  mongo:
-    image: mongo:7.0
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-    networks:
-      - schools24-net
-
-networks:
-  schools24-net:
-    driver: bridge
-
-volumes:
-  redis_data:
-  mongo_data:
-  # postgres_data:  # Uncomment if using local PostgreSQL
+# No external dependencies needed!
+# - In-memory cache replaces Redis
+# - Supabase (external) replaces PostgreSQL
+# - MongoDB Atlas (external) replaces local MongoDB
+# - Built-in middleware replaces KrakenD

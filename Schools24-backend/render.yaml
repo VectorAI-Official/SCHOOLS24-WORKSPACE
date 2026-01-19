@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: schools24-backend
+    env: go
+    plan: free
+    rootDir: schools24-backend
+    buildCommand: go build -ldflags="-s -w" -o app ./cmd/server/main.go
+    startCommand: ./app
+    envVars:
+      - key: GIN_MODE
+        value: release
+      - key: PORT
+        value: 10000
+      - key: CACHE_MAX_SIZE_MB
+        value: 200
+      - key: RATE_LIMIT_REQUESTS_PER_MIN
+        value: 100
+      - key: RATE_LIMIT_BURST
+        value: 50
+      - key: CORS_ALLOWED_ORIGINS
+        value: "*"
+      # Add these manually in Render dashboard (secrets):
+      # - DATABASE_URL
+      # - MONGODB_URI
+      # - MONGODB_DATABASE
+      # - JWT_SECRET
+    autoDeploy: true
+    healthCheckPath: /health
